@@ -14,8 +14,8 @@ libraryDependencies += "org.reactivecouchbase" %% "good-old-play-framework" % "1
   - `routesGenerator := StaticRoutesGenerator`
 * declare your controllers as objects
   - `object MyController extends Controller { ... }`
-* use the trait `GoodOldPlayframework` wherever you want or just use `old.play.api._` stuff
-* Have fun not using @Inject (except maybe for Filter, ErrorHandler, modules, etc ...)
+* use the trait `old.play.GoodOldPlayframework` wherever you want or just use `old.play.api._` imports
+* Have fun not using `@Inject` (except maybe for Filter, ErrorHandler, modules, etc ...)
 
 
 ```scala
