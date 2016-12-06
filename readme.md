@@ -17,6 +17,28 @@ libraryDependencies += "org.reactivecouchbase" %% "good-old-play-framework" % "1
 * use the trait `gopf.play.GoodOldPlayframework` wherever you want or just use `gopf.play.api._` imports
 * Have fun not using `@Inject` (except maybe for Filter, ErrorHandler, modules, etc ...)
 
+## Before
+
+```scala
+package controllers
+
+import javax.inject._
+import play.api.mvc._
+import play.api.libs.ws.WSClient
+import scala.concurrent.ExecutionContext
+
+@Singleton
+class MyController @Inject()(wsClient: WSClient)(implicit ec: ExecutionContext) extends Controller {
+
+  def ip = Action.async {
+    wsClient.url("http://jsonip.com").get.map { resp =>
+      Ok(resp.json)
+    }
+  }
+}
+```
+
+## After
 
 ```scala
 package controllers
