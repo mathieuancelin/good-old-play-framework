@@ -53,11 +53,11 @@ object Env {
   }
 
   lazy val httpRequestExecContext = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(procNbr *
-    configuration.getInt("threadpools.http-requests").getOrElse(2), factory("http-requests")))
+    configuration.getInt("gopf.threadpools.http-requests").getOrElse(2), factory("http-requests")))
   lazy val httpCallsExecContext = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(procNbr *
-    configuration.getInt("threadpools.http-calls").getOrElse(10), factory("http-calls")))
+    configuration.getInt("gopf.threadpools.http-calls").getOrElse(10), factory("http-calls")))
   lazy val dataStoreExecContext = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(procNbr *
-    configuration.getInt("threadpools.data-store").getOrElse(5), factory("data-store")))
+    configuration.getInt("gopf.threadpools.data-store").getOrElse(5), factory("data-store")))
 
 }
 
