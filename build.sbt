@@ -1,6 +1,6 @@
 name := """good-old-play-framework"""
 organization := "org.reactivecouchbase"
-version := "1.0.0"
+version := "1.0.1"
 scalaVersion := "2.11.8"
 
 libraryDependencies += "com.typesafe.play" %% "play" % "2.5.10"

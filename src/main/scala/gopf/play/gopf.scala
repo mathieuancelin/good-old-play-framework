@@ -17,18 +17,18 @@ import play.api.libs.ws.WSClient
 
 import scala.concurrent.ExecutionContext
 
-class GooOldPlayframeworkLoader extends ApplicationLoader {
+class GooOldPlayFrameworkLoader extends ApplicationLoader {
   def load(context: Context) = {
     val application = new GuiceApplicationBuilder(
       environment = context.environment,
       configuration = context.initialConfiguration
     ).build()
-    Env._ref.set(application) // Wooow !!!!!
+    GooOldPlayFrameworkContext._ref.set(application) // Wooow !!!!!
     application
   }
 }
 
-object Env {
+object GooOldPlayFrameworkContext {
 
   // Yeah, I know, it's really really bad ...
   private[play] val _ref: AtomicReference[Application] = new AtomicReference[Application]()
@@ -64,83 +64,83 @@ object Env {
 trait GoodOldPlayframework {
 
   object Implicits {
-    implicit def defaultActorSystem: ActorSystem = Env.actorSystem
-    implicit def defaultMaterializer: Materializer = Env.materializer
-    implicit def defaultScheduler: Scheduler = Env.scheduler
-    implicit def defaultContext: ExecutionContext = Env.playExecutionContext
+    implicit def defaultActorSystem: ActorSystem = GooOldPlayFrameworkContext.actorSystem
+    implicit def defaultMaterializer: Materializer = GooOldPlayFrameworkContext.materializer
+    implicit def defaultScheduler: Scheduler = GooOldPlayFrameworkContext.scheduler
+    implicit def defaultContext: ExecutionContext = GooOldPlayFrameworkContext.playExecutionContext
   }
 
-  def WS = Env.WS
-  def Cache = Env.cache
-  def Configuration = Env.configuration
-  def Application = Env.application
-  def Injector = Env.injector
-  def Mode = Env.mode
-  def DB = Env.dbApi
+  def WS = GooOldPlayFrameworkContext.WS
+  def Cache = GooOldPlayFrameworkContext.cache
+  def Configuration = GooOldPlayFrameworkContext.configuration
+  def Application = GooOldPlayFrameworkContext.application
+  def Injector = GooOldPlayFrameworkContext.injector
+  def Mode = GooOldPlayFrameworkContext.mode
+  def DB = GooOldPlayFrameworkContext.dbApi
 
-  def currentApplication = Env.application
-  def defaultContext = Env.playExecutionContext
-  def defaultScheduler = Env.scheduler
-  def defaultMaterializer = Env.scheduler
-  def defaultActorSystem = Env.configuration
-  def httpRequestsContext = Env.httpRequestExecContext
-  def httpCallsContext = Env.httpCallsExecContext
-  def dataStoreContext = Env.dataStoreExecContext
+  def currentApplication = GooOldPlayFrameworkContext.application
+  def defaultContext = GooOldPlayFrameworkContext.playExecutionContext
+  def defaultScheduler = GooOldPlayFrameworkContext.scheduler
+  def defaultMaterializer = GooOldPlayFrameworkContext.scheduler
+  def defaultActorSystem = GooOldPlayFrameworkContext.configuration
+  def httpRequestsContext = GooOldPlayFrameworkContext.httpRequestExecContext
+  def httpCallsContext = GooOldPlayFrameworkContext.httpCallsExecContext
+  def dataStoreContext = GooOldPlayFrameworkContext.dataStoreExecContext
 }
 
 object api {
   object Play {
-    def application = Env.application
-    def maybeApplication = Option(Env.application)
-    def injector = Env.injector
-    def classloader = Env.application.classloader
-    def configuration = Env.configuration
-    def current = Env.application
-    def isDev = Env.mode == Mode.Dev
-    def isProd = Env.mode == Mode.Prod
-    def isTest = Env.mode == Mode.Test
-    def mode = Env.mode
-    def getFile(relativePath: String) = Env.application.getFile(relativePath)
-    def getExistingFile(relativePath: String) = Env.application.getExistingFile(relativePath)
-    def resource(name: String) = Env.application.resource(name)
-    def resourceAsStream(name: String) = Env.application.resourceAsStream(name)
+    def application = GooOldPlayFrameworkContext.application
+    def maybeApplication = Option(GooOldPlayFrameworkContext.application)
+    def injector = GooOldPlayFrameworkContext.injector
+    def classloader = GooOldPlayFrameworkContext.application.classloader
+    def configuration = GooOldPlayFrameworkContext.configuration
+    def current = GooOldPlayFrameworkContext.application
+    def isDev = GooOldPlayFrameworkContext.mode == Mode.Dev
+    def isProd = GooOldPlayFrameworkContext.mode == Mode.Prod
+    def isTest = GooOldPlayFrameworkContext.mode == Mode.Test
+    def mode = GooOldPlayFrameworkContext.mode
+    def getFile(relativePath: String) = GooOldPlayFrameworkContext.application.getFile(relativePath)
+    def getExistingFile(relativePath: String) = GooOldPlayFrameworkContext.application.getExistingFile(relativePath)
+    def resource(name: String) = GooOldPlayFrameworkContext.application.resource(name)
+    def resourceAsStream(name: String) = GooOldPlayFrameworkContext.application.resourceAsStream(name)
   }
   object libs {
     object db {
       object DB {
-        def getConnection(name: String = "default", autocommit: Boolean = true) = Env.dbApi.database(name).getConnection(autocommit)
-        def getDataSource(name: String = "default") = Env.dbApi.database(name).dataSource
-        def withConnection[A](block: (Connection) => A) = Env.dbApi.database("default").withConnection(block)
-        def withConnection[A](name: String)(block: (Connection) => A) = Env.dbApi.database(name).withConnection(block)
-        def withTransaction[A](block: (Connection) => A) = Env.dbApi.database("default").withTransaction(block)
-        def withTransaction[A](name: String = "default")(block: (Connection) => A) = Env.dbApi.database(name).withTransaction(block)
+        def getConnection(name: String = "default", autocommit: Boolean = true) = GooOldPlayFrameworkContext.dbApi.database(name).getConnection(autocommit)
+        def getDataSource(name: String = "default") = GooOldPlayFrameworkContext.dbApi.database(name).dataSource
+        def withConnection[A](block: (Connection) => A) = GooOldPlayFrameworkContext.dbApi.database("default").withConnection(block)
+        def withConnection[A](name: String)(block: (Connection) => A) = GooOldPlayFrameworkContext.dbApi.database(name).withConnection(block)
+        def withTransaction[A](block: (Connection) => A) = GooOldPlayFrameworkContext.dbApi.database("default").withTransaction(block)
+        def withTransaction[A](name: String = "default")(block: (Connection) => A) = GooOldPlayFrameworkContext.dbApi.database(name).withTransaction(block)
       }
     }
     object ws {
-      def WS = Env.WS
+      def WS = GooOldPlayFrameworkContext.WS
     }
     object cache {
-      def Cache = Env.cache
+      def Cache = GooOldPlayFrameworkContext.cache
     }
     object concurrent {
       object Akka {
         object Implicits {
-          implicit def defaultActorSystem: ActorSystem = Env.actorSystem
-          implicit def defaultMaterializer: Materializer = Env.materializer
-          implicit def defaultScheduler: Scheduler = Env.scheduler
+          implicit def defaultActorSystem: ActorSystem = GooOldPlayFrameworkContext.actorSystem
+          implicit def defaultMaterializer: Materializer = GooOldPlayFrameworkContext.materializer
+          implicit def defaultScheduler: Scheduler = GooOldPlayFrameworkContext.scheduler
         }
-        def defaultScheduler: Scheduler = Env.scheduler
-        def defaultActorSystem: ActorSystem = Env.actorSystem
-        def defaultMaterializer: Materializer = Env.materializer
+        def defaultScheduler: Scheduler = GooOldPlayFrameworkContext.scheduler
+        def defaultActorSystem: ActorSystem = GooOldPlayFrameworkContext.actorSystem
+        def defaultMaterializer: Materializer = GooOldPlayFrameworkContext.materializer
       }
       object Execution {
         object Implicits {
-          implicit def defaultContext: ExecutionContext = Env.playExecutionContext
+          implicit def defaultContext: ExecutionContext = GooOldPlayFrameworkContext.playExecutionContext
         }
-        def defaultContext: ExecutionContext = Env.playExecutionContext
-        def httpRequestsContext = Env.httpRequestExecContext
-        def httpCallsContext = Env.httpCallsExecContext
-        def dataStoreContext = Env.dataStoreExecContext
+        def defaultContext: ExecutionContext = GooOldPlayFrameworkContext.playExecutionContext
+        def httpRequestsContext = GooOldPlayFrameworkContext.httpRequestExecContext
+        def httpCallsContext = GooOldPlayFrameworkContext.httpCallsExecContext
+        def dataStoreContext = GooOldPlayFrameworkContext.dataStoreExecContext
       }
     }
   }
