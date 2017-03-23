@@ -77,15 +77,18 @@ trait GoodOldPlayframework {
   def Injector = GooOldPlayFrameworkContext.injector
   def Mode = GooOldPlayFrameworkContext.mode
   def DB = GooOldPlayFrameworkContext.dbApi
+  def Play = api.Play
+  def Akka = api.libs.concurrent.Akka
+  def Execution = api.libs.concurrent.Execution
 
-  def currentApplication = GooOldPlayFrameworkContext.application
-  def defaultContext = GooOldPlayFrameworkContext.playExecutionContext
-  def defaultScheduler = GooOldPlayFrameworkContext.scheduler
-  def defaultMaterializer = GooOldPlayFrameworkContext.scheduler
-  def defaultActorSystem = GooOldPlayFrameworkContext.configuration
-  def httpRequestsContext = GooOldPlayFrameworkContext.httpRequestExecContext
-  def httpCallsContext = GooOldPlayFrameworkContext.httpCallsExecContext
-  def dataStoreContext = GooOldPlayFrameworkContext.dataStoreExecContext
+  def currentApplication: Application = GooOldPlayFrameworkContext.application
+  def defaultContext: ExecutionContext = GooOldPlayFrameworkContext.playExecutionContext
+  def defaultScheduler: Scheduler = GooOldPlayFrameworkContext.scheduler
+  def defaultMaterializer: Materializer = GooOldPlayFrameworkContext.materializer
+  def defaultActorSystem: ActorSystem = GooOldPlayFrameworkContext.actorSystem
+  def httpRequestsContext: ExecutionContext = GooOldPlayFrameworkContext.httpRequestExecContext
+  def httpCallsContext: ExecutionContext = GooOldPlayFrameworkContext.httpCallsExecContext
+  def dataStoreContext: ExecutionContext = GooOldPlayFrameworkContext.dataStoreExecContext
 }
 
 object api {
