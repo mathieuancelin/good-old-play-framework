@@ -11,19 +11,28 @@ import play.api.Mode.Mode
 import play.api._
 import play.api.cache.CacheApi
 import play.api.db.DBApi
-import play.api.inject.Injector
+import play.api.inject.{ApplicationLifecycle, Injector}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.WSClient
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class GooOldPlayFrameworkLoader extends ApplicationLoader {
+
+  val logger = Logger("GooOldPlayFramework")
+
   def load(context: Context) = {
     val application = new GuiceApplicationBuilder(
       environment = context.environment,
       configuration = context.initialConfiguration
     ).build()
     GooOldPlayFrameworkContext._ref.set(application) // Wooow !!!!!
+    logger.info("Application loaded using GooOldPlayFramework")
+    application.injector.instanceOf(classOf[ApplicationLifecycle]).addStopHook(() => {
+      logger.info("Application is stopping, reset GooOldPlayFramework context")
+      GooOldPlayFrameworkContext._ref.set(null) // Wooow !!!!!
+      Future.successful(())
+    })
     application
   }
 }
@@ -33,30 +42,30 @@ object GooOldPlayFrameworkContext {
   // Yeah, I know, it's really really bad ...
   private[play] val _ref: AtomicReference[Application] = new AtomicReference[Application]()
 
-  lazy val application: Application = Option(_ref.get()).get
-  lazy val actorSystem: ActorSystem = application.actorSystem
-  lazy val materializer: Materializer = application.materializer
-  lazy val configuration: Configuration = application.configuration
-  lazy val mode: Mode = application.mode
-  lazy val scheduler: Scheduler = actorSystem.scheduler
-  lazy val injector: Injector = application.injector
-  lazy val playExecutionContext: ExecutionContext = injector.instanceOf(classOf[ExecutionContext])
-  lazy val environment: Environment = injector.instanceOf(classOf[Environment])
-  lazy val WS: WSClient = injector.instanceOf(classOf[WSClient])
-  lazy val dbApi: DBApi = injector.instanceOf(classOf[DBApi])
-  lazy val cache: CacheApi = injector.instanceOf(classOf[CacheApi])
-  lazy val procNbr = Runtime.getRuntime.availableProcessors()
+  def application: Application = Option(_ref.get()).get
+  def actorSystem: ActorSystem = application.actorSystem
+  def materializer: Materializer = application.materializer
+  def configuration: Configuration = application.configuration
+  def mode: Mode = application.mode
+  def scheduler: Scheduler = actorSystem.scheduler
+  def injector: Injector = application.injector
+  def playExecutionContext: ExecutionContext = injector.instanceOf(classOf[ExecutionContext])
+  def environment: Environment = injector.instanceOf(classOf[Environment])
+  def WS: WSClient = injector.instanceOf(classOf[WSClient])
+  def dbApi: DBApi = injector.instanceOf(classOf[DBApi])
+  def cache: CacheApi = injector.instanceOf(classOf[CacheApi])
+  def procNbr = Runtime.getRuntime.availableProcessors()
 
   private def factory(of: String) = new ThreadFactory {
     val counter = new AtomicInteger(0)
     override def newThread(r: Runnable): Thread = new Thread(r, s"$of-${counter.incrementAndGet()}")
   }
 
-  lazy val httpRequestExecContext = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(procNbr *
+  lazy val httpRequestExecContext: ExecutionContext = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(procNbr *
     configuration.getInt("gopf.threadpools.http-requests").getOrElse(2), factory("http-requests")))
-  lazy val httpCallsExecContext = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(procNbr *
+  lazy val httpCallsExecContext: ExecutionContext = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(procNbr *
     configuration.getInt("gopf.threadpools.http-calls").getOrElse(10), factory("http-calls")))
-  lazy val dataStoreExecContext = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(procNbr *
+  lazy val dataStoreExecContext: ExecutionContext = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(procNbr *
     configuration.getInt("gopf.threadpools.data-store").getOrElse(5), factory("data-store")))
 
 }
