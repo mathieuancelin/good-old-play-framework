@@ -6,7 +6,7 @@ Use Play Scala 2.5 like it's Play Scala 2.4
 ```scala
 resolvers += "good-old-play-framework repository" at "https://raw.githubusercontent.com/mathieuancelin/good-old-play-framework/master/repository/releases"
 
-libraryDependencies += "org.reactivecouchbase" %% "good-old-play-framework" % "1.0.1"
+libraryDependencies += "org.reactivecouchbase" %% "good-old-play-framework" % "1.0.3"
 ```
 * in the `conf/application.conf` file add
   - `play.application.loader = "gopf.play.GooOldPlayFrameworkLoader"`
